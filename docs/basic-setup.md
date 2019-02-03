@@ -31,8 +31,6 @@ UPDATE `oauth2_client` SET `grants` = 'client_credentials password' WHERE `ident
 UPDATE `oauth2_client` SET `scopes` = 'create read' WHERE `identifier` = 'foo';
 ```
 
-> **NOTE:** You will have to setup an [event listener](controlling-token-scopes.md#listener) which will assign the client scopes to the issued access token.
-
 ### Delete a client
 
 ```sql
