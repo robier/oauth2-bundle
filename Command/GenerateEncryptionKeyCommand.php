@@ -8,17 +8,17 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-final class GenerateEncryptionKey extends Command
+final class GenerateEncryptionKeyCommand extends Command
 {
     /**
      * @var string
      */
-    protected static $defaultName = 'oauth2:encryptionKey';
+    protected static $defaultName = 'trikoder:oauth2:generate-encryption-key';
 
     /**
      * @var string
      */
-    private const ENCRYPTION_KEY_ENV_NAME = 'OAUTH2_ENCRYPTION_KEY';
+    private const ENCRYPTION_KEY_ENV_NAME = 'TRIKODER_OAUTH2_ENCRYPTION_KEY';
 
     /**
      * @var int
@@ -49,9 +49,19 @@ final class GenerateEncryptionKey extends Command
     public function configure(): void
     {
         $this
-            ->setDescription('Generates strong encryption key for OAuth2 bundle and persists generated value to .env')
-            ->addOption('dry-run', 'd', InputOption::VALUE_NONE, 'Do not modify any file')
-            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Overwrite old encryption key if exists');
+            ->setDescription('Generates strong encryption key for OAuth2 bundle and persists generated value to .env file if file exists')
+            ->addOption(
+                'dry-run',
+                'd',
+                InputOption::VALUE_NONE,
+                'Do not modify any file'
+            )
+            ->addOption(
+                'force',
+                'f',
+                InputOption::VALUE_NONE,
+                'Overwrite old encryption key if exists'
+            );
     }
 
     /**
@@ -59,6 +69,7 @@ final class GenerateEncryptionKey extends Command
      * @param OutputInterface $output
      *
      * @return int
+     * @throws \Exception
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {

@@ -7,7 +7,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
-use Trikoder\Bundle\OAuth2Bundle\Command\GenerateEncryptionKey;
+use Trikoder\Bundle\OAuth2Bundle\Command\GenerateEncryptionKeyCommand;
 
 final class GenerateEncryptionKeyTest extends KernelTestCase
 {
@@ -42,19 +42,19 @@ final class GenerateEncryptionKeyTest extends KernelTestCase
     {
         $console = static::$container->get('trikoder.oauth2.command.generate_encryption_key');
 
-        $this->assertInstanceOf(GenerateEncryptionKey::class, $console);
+        $this->assertInstanceOf(GenerateEncryptionKeyCommand::class, $console);
     }
 
     public function testGeneratingKey(): void
     {
-        $response = $this->runCommand(new GenerateEncryptionKey('/tmp', new Filesystem()), ['--dry-run' => true]);
+        $response = $this->runCommand(new GenerateEncryptionKeyCommand('/tmp', new Filesystem()), ['--dry-run' => true]);
 
         $this->assertRandomGeneratedKey($response);
     }
 
     public function testGeneratingKeyForNotExistingEnvFile(): void
     {
-        $response = $this->runCommand(new GenerateEncryptionKey('/tmp', new Filesystem()));
+        $response = $this->runCommand(new GenerateEncryptionKeyCommand('/tmp', new Filesystem()));
 
         $this->assertRandomGeneratedKey($response);
 
@@ -65,7 +65,7 @@ final class GenerateEncryptionKeyTest extends KernelTestCase
     {
         file_put_contents('/tmp/.env', '');
 
-        $response = $this->runCommand(new GenerateEncryptionKey('/tmp', new Filesystem()));
+        $response = $this->runCommand(new GenerateEncryptionKeyCommand('/tmp', new Filesystem()));
 
         $this->assertRandomGeneratedKey($response);
 
@@ -74,9 +74,9 @@ final class GenerateEncryptionKeyTest extends KernelTestCase
 
     public function testGeneratingKeyForExistingEnvFileWithVariableDefined(): void
     {
-        file_put_contents('/tmp/.env', 'OAUTH2_ENCRYPTION_KEY=test');
+        file_put_contents('/tmp/.env', 'TRIKODER_OAUTH2_ENCRYPTION_KEY=test');
 
-        $response = $this->runCommand(new GenerateEncryptionKey('/tmp', new Filesystem()));
+        $response = $this->runCommand(new GenerateEncryptionKeyCommand('/tmp', new Filesystem()));
 
         $this->assertRandomGeneratedKey($response);
 
@@ -85,9 +85,9 @@ final class GenerateEncryptionKeyTest extends KernelTestCase
 
     public function testGeneratingKeyForExistingEnvFileWithVariableDefinedForce(): void
     {
-        file_put_contents('/tmp/.env', 'OAUTH2_ENCRYPTION_KEY=test');
+        file_put_contents('/tmp/.env', 'TRIKODER_OAUTH2_ENCRYPTION_KEY=test');
 
-        $response = $this->runCommand(new GenerateEncryptionKey('/tmp', new Filesystem()), ['--force' => true]);
+        $response = $this->runCommand(new GenerateEncryptionKeyCommand('/tmp', new Filesystem()), ['--force' => true]);
 
         $this->assertRandomGeneratedKey($response);
 

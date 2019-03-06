@@ -73,24 +73,7 @@
             <tag name="controller.service_arguments" />
         </service>
 
-        <!-- Additional services -->
-
-        <service id="phpseclib\Crypt\RSA" />
-
         <!-- Commands -->
-        <service id="trikoder.oauth2.command.generate_rsa" class="Trikoder\Bundle\OAuth2Bundle\Command\GenerateRsaPair">
-            <tag name="console.command" />
-            <argument key="$privateKeyPath" />
-            <argument key="$publicKeyPath" />
-            <argument key="$filesystem" type="service" id="Symfony\Component\Filesystem\Filesystem" />
-            <argument key="$rsa" type="service" id="phpseclib\Crypt\RSA" />
-        </service>
-
-        <service id="trikoder.oauth2.command.generate_encryption_key" class="Trikoder\Bundle\OAuth2Bundle\Command\GenerateEncryptionKey">
-            <tag name="console.command" />
-            <argument key="$envFileDir" />
-            <argument key="$filesystem" type="service" id="Symfony\Component\Filesystem\Filesystem" />
-        </service>
 
         <service id="trikoder.oauth2.command.create_client_command" class="Trikoder\Bundle\OAuth2Bundle\Command\CreateClientCommand">
             <argument type="service" id="Trikoder\Bundle\OAuth2Bundle\Manager\ClientManagerInterface" />
@@ -101,7 +84,22 @@
             <tag name="console.command" />
         </service>
 
+        <service id="trikoder.oauth2.command.generate_rsa" class="Trikoder\Bundle\OAuth2Bundle\Command\GenerateRsaPairCommand">
+            <tag name="console.command" />
+            <argument key="$privateKeyPath" />
+            <argument key="$publicKeyPath" />
+            <argument key="$filesystem" type="service" id="Symfony\Component\Filesystem\Filesystem" />
+            <argument key="$rsa" type="service" id="trikoder.oauth2.generator.rsa" />
+        </service>
+
+        <service id="trikoder.oauth2.command.generate_encryption_key" class="Trikoder\Bundle\OAuth2Bundle\Command\GenerateEncryptionKeyCommand">
+            <tag name="console.command" />
+            <argument key="$envFileDir">%kernel.project_dir%</argument>
+            <argument key="$filesystem" type="service" id="Symfony\Component\Filesystem\Filesystem" />
+        </service>
+
         <!-- Utility services -->
         <service id="trikoder.oauth2.converter.scope_converter" class="Trikoder\Bundle\OAuth2Bundle\Converter\ScopeConverter" />
+        <service id="trikoder.oauth2.generator.rsa" class="phpseclib\Crypt\RSA" />
     </services>
 </container>

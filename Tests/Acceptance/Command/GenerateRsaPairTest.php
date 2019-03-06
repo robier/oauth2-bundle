@@ -9,7 +9,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
-use Trikoder\Bundle\OAuth2Bundle\Command\GenerateRsaPair;
+use Trikoder\Bundle\OAuth2Bundle\Command\GenerateRsaPairCommand;
 
 final class GenerateRsaPairTest extends KernelTestCase
 {
@@ -55,7 +55,7 @@ final class GenerateRsaPairTest extends KernelTestCase
     {
         $console = static::$container->get('trikoder.oauth2.command.generate_rsa');
 
-        $this->assertInstanceOf(GenerateRsaPair::class, $console);
+        $this->assertInstanceOf(GenerateRsaPairCommand::class, $console);
     }
 
     /**
@@ -69,7 +69,7 @@ final class GenerateRsaPairTest extends KernelTestCase
 
         $rsa = $this->mockRSA(static::TEST_DATA['content']);
 
-        $this->runCommand(new GenerateRsaPair(
+        $this->runCommand(new GenerateRsaPairCommand(
             static::TEST_DATA['path']['privatekey'],
             static::TEST_DATA['path']['publickey'],
             new Filesystem(),
@@ -82,8 +82,6 @@ final class GenerateRsaPairTest extends KernelTestCase
             $this->assertFileExists($path);
 
             $this->assertFileContentEquals($content, $path);
-
-            $this->assertFileChmod($path, 0600);
         }
     }
 
@@ -93,7 +91,7 @@ final class GenerateRsaPairTest extends KernelTestCase
             file_put_contents($path, static::TEST_DATA['content'][$key]);
         }
 
-        $this->runCommand(new GenerateRsaPair(
+        $this->runCommand(new GenerateRsaPairCommand(
             static::TEST_DATA['path']['privatekey'],
             static::TEST_DATA['path']['publickey'],
             new Filesystem(),
@@ -117,7 +115,7 @@ final class GenerateRsaPairTest extends KernelTestCase
 
         $rsa = $this->mockRSA($testContent);
 
-        $this->runCommand(new GenerateRsaPair(
+        $this->runCommand(new GenerateRsaPairCommand(
             static::TEST_DATA['path']['privatekey'],
             static::TEST_DATA['path']['publickey'],
             new Filesystem(),

@@ -9,17 +9,12 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-final class GenerateRsaPair extends Command
+final class GenerateRsaPairCommand extends Command
 {
     /**
      * @var string
      */
-    protected static $defaultName = 'oauth2:rsa';
-
-    /**
-     * @var int
-     */
-    private const KEYS_CHMOD = 0600;
+    protected static $defaultName = 'trikoder:oauth2:generate-rsa';
 
     /**
      * @var int
@@ -66,8 +61,20 @@ final class GenerateRsaPair extends Command
     public function configure(): void
     {
         $this
-            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Overwrite keys if they already exist')
-            ->addOption('length', 'l', InputOption::VALUE_OPTIONAL, 'The length of the private key', static::DEFAULT_LENGTH_OF_PRIVATE_KEY);
+            ->setDescription('Generates RSA public/private pair')
+            ->addOption(
+                'force',
+                'f',
+                InputOption::VALUE_NONE,
+                'Overwrite keys if they already exist'
+            )
+            ->addOption(
+                'length',
+                'l',
+                InputOption::VALUE_OPTIONAL,
+                'The length of the private key',
+                static::DEFAULT_LENGTH_OF_PRIVATE_KEY
+            );
     }
 
     /**
@@ -78,8 +85,8 @@ final class GenerateRsaPair extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($this->keysExists() && !$input->getOption('force')) {
-            $output->writeln('<error>Encryption keys already exist. Use the --force option to overwrite them.</error>');
+        if ($this->keysExists() && false === $input->getOption('force')) {
+            $output->writeln('<error>Encryption keys already exist. Use the --force|-f option to overwrite them.</error>');
 
             return 1;
         }
@@ -89,8 +96,6 @@ final class GenerateRsaPair extends Command
         foreach (['publickey', 'privatekey'] as $keyName) {
             $this->filesystem->dumpFile($this->paths[$keyName], $keys[$keyName]);
         }
-
-        $this->filesystem->chmod($this->paths, static::KEYS_CHMOD);
 
         $output->writeln('<info>Encryption keys generated successfully.</info>');
 
