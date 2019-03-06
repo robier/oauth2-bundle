@@ -46,7 +46,7 @@ This package is currently in the active development.
         authorization_server:
 
             # Full path to the private key file.
-            # How to generate a private key: https://oauth2.thephpleague.com/installation/#generating-public-and-private-keys
+            # generate public/private RSA pair via console command bin/console oauth2:rsa 
             private_key:    # Required, Example: /var/oauth/private.key
 
             # The string used as an encryption key.
@@ -64,7 +64,7 @@ This package is currently in the active development.
         resource_server:
 
             # Full path to the public key file
-            # How to generate a public key: https://oauth2.thephpleague.com/installation/#generating-public-and-private-keys
+            # generate public/private RSA pair via console command bin/console oauth2:rsa
             public_key:    # Required, Example: /var/oauth/public.key
 
         # Scopes that you wish to utilize in your application.

@@ -35,6 +35,7 @@ final class TrikoderOAuth2Extension extends Extension implements PrependExtensio
         $this->configureAuthorizationServer($container, $config['authorization_server']);
         $this->configureResourceServer($container, $config['resource_server']);
         $this->configureScopes($container, $config['scopes']);
+        $this->configureCommands($container, $config);
     }
 
     /**
@@ -187,5 +188,19 @@ final class TrikoderOAuth2Extension extends Extension implements PrependExtensio
                 new Definition(ScopeModel::class, [$scope]),
             ]);
         }
+    }
+
+    private function configureCommands(ContainerBuilder $container, array $config): void
+    {
+        $container
+            ->getDefinition('trikoder.oauth2.command.generate_rsa')
+            ->replaceArgument('$privateKeyPath', $config['authorization_server']['private_key'])
+            ->replaceArgument('$publicKeyPath', $config['resource_server']['public_key'])
+        ;
+
+        $container
+            ->getDefinition('trikoder.oauth2.command.generate_encryption_key')
+            ->replaceArgument('$envFileDir', $container->getParameter('kernel.project_dir'))
+        ;
     }
 }
