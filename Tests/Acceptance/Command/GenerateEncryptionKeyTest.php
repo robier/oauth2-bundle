@@ -16,9 +16,6 @@ final class GenerateEncryptionKeyTest extends KernelTestCase
      */
     private $app;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -94,20 +91,11 @@ final class GenerateEncryptionKeyTest extends KernelTestCase
         $this->assertStringEndsWith("Old encryption key value replaced with new one!\n", $response);
     }
 
-    /**
-     * @param string $response
-     */
     private function assertRandomGeneratedKey(string $response): void
     {
         $this->assertRegExp('/random generated key: .*/i', $response);
     }
 
-    /**
-     * @param Command $command
-     * @param array $params
-     *
-     * @return string
-     */
     private function runCommand(Command $command, array $params = []): string
     {
         $this->app->add($command);

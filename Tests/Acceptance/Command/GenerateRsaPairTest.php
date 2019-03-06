@@ -29,9 +29,6 @@ final class GenerateRsaPairTest extends KernelTestCase
      */
     private $app;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -136,10 +133,6 @@ final class GenerateRsaPairTest extends KernelTestCase
         return $rsa;
     }
 
-    /**
-     * @param string $path
-     * @param int $chmod
-     */
     private function assertFileChmod(string $path, int $chmod): void
     {
         $octalChmod = octdec(substr(sprintf('%o', fileperms($path)), -4));
@@ -147,21 +140,11 @@ final class GenerateRsaPairTest extends KernelTestCase
         $this->assertSame($chmod, $octalChmod);
     }
 
-    /**
-     * @param string $expected
-     * @param string $pathToFile
-     */
     private function assertFileContentEquals(string $expected, string $pathToFile): void
     {
         $this->assertSame($expected, file_get_contents($pathToFile));
     }
 
-    /**
-     * @param Command $command
-     * @param array $params
-     *
-     * @return string
-     */
     private function runCommand(Command $command, array $params = []): string
     {
         $this->app->add($command);

@@ -36,12 +36,6 @@ final class GenerateRsaPairCommand extends Command
      */
     private $rsa;
 
-    /**
-     * @param string $privateKeyPath
-     * @param string $publicKeyPath
-     * @param Filesystem $filesystem
-     * @param RSA $rsa
-     */
     public function __construct(string $privateKeyPath, string $publicKeyPath, Filesystem $filesystem, RSA $rsa)
     {
         parent::__construct(null);
@@ -55,9 +49,6 @@ final class GenerateRsaPairCommand extends Command
         $this->rsa = $rsa;
     }
 
-    /**
-     * @return void
-     */
     public function configure(): void
     {
         $this
@@ -77,12 +68,6 @@ final class GenerateRsaPairCommand extends Command
             );
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return int
-     */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($this->keysExists() && false === $input->getOption('force')) {
@@ -102,9 +87,6 @@ final class GenerateRsaPairCommand extends Command
         return 0;
     }
 
-    /**
-     * @return bool
-     */
     private function keysExists(): bool
     {
         foreach ($this->paths as $path) {

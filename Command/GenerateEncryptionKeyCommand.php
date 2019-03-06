@@ -43,9 +43,6 @@ final class GenerateEncryptionKeyCommand extends Command
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * @return void
-     */
     public function configure(): void
     {
         $this
@@ -65,10 +62,6 @@ final class GenerateEncryptionKeyCommand extends Command
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return int
      * @throws \Exception
      */
     public function execute(InputInterface $input, OutputInterface $output): int
